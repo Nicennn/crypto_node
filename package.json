@@ -1,0 +1,25 @@
+{
+  "name": "crypto_node",
+  "version": "1.0.0",
+  "description": "node program to fetch data from CoinMarketCap",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+	"dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mphschmitt/crypto_node.git"
+  },
+  "author": "mschmitt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mphschmitt/crypto_node/issues"
+  },
+  "homepage": "https://github.com/mphschmitt/crypto_node#readme",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "morgan": "^1.9.0"
+  }
+}

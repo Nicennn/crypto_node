@@ -1,4 +1,4 @@
-.vim
+*.vim
 .swp
 node_modules/
 data/

@@ -1,6 +1,5 @@
 const https = require("https");
 const ejs = require("ejs");
-const passport = require("passport");
 
 const options = {
 	protocol: "https:",
@@ -11,7 +10,7 @@ const options = {
 	json: true
 };
 
-module.exports = (app, currencies) => {
+module.exports = (app, passport, currencies) => {
 	const location_css = "css";
 	const location_js = "js";
 	const location_images = "images";
@@ -19,11 +18,15 @@ module.exports = (app, currencies) => {
 	var httpsRequestResult;
 
 	app.get("/", 
-		(req, res) => res.render("pages/index", {
-			css: location_css,
-			js: location_js,
-			images: location_images
-		})
+		(req, res) => {
+			console.log(req.session);
+
+			res.render("pages/index", {
+				css: location_css,
+				js: location_js,
+				images: location_images
+			});
+		}
 	);
 
 	app.get("/list",
@@ -32,8 +35,8 @@ module.exports = (app, currencies) => {
 			var body = "";
 
 			const rqst = https.get(options, (res) => {
-				console.log("status code: ", res.statusCode); 
-				console.log("headers: ", res.headers);
+				//console.log("status code: ", res.statusCode); 
+				//console.log("headers: ", res.headers);
 
 				// Reconstitute the body from multiple data chunks
 				res.on("data", data =>  { body += data });
@@ -42,12 +45,10 @@ module.exports = (app, currencies) => {
 				res.on("end", () => {
 					requestResult = JSON.parse(body);
 					let data = requestResult.data;
-					console.log(data);
 
 					for (var key in data) {
 						if (data.hasOwnProperty(key)) {
 							let coin = data[key];
-							console.log("coin: ", coin);
 							currencies.push(Object.assign(coin));
 						}
 					}
@@ -66,7 +67,23 @@ module.exports = (app, currencies) => {
 		}
 	);
 
-	app.get("/login", (req, res) => { res.render("pages/login") });
+	app.get("/login", (req, res) => { 
+		console.log("C'est un GET!!!!!");
+		res.render("pages/login") 
+	});
+	app.post("/login", passport.authenticate("local-signup", {
+		successRedirect: "/",
+		failureRedirect: "/signup"
+	}));
 
-	app.get("/signin", (req, res) => { res.render("pages/signin") });
+	app.get("/signup", (req, res) => { res.render("pages/signup") });
+	app.post("/signup", passport.authenticate("local-signup", {
+		successRedirect: "/",
+		failureRedirect: "/list"
+	}));
+
+	app.get("/logout", (req, res) => {
+		req.logout();
+		res.redirect("/");
+	})
 };

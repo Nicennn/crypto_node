@@ -1,4 +1,5 @@
 const https = require("https");
+const ejs = require("ejs");
 
 const options = {
 	protocol: "https:",
@@ -40,24 +41,14 @@ module.exports = (app, currencies) => {
 					requestResult = JSON.parse(body);
 					let data = requestResult.data;
 					console.log(data);
-					console.log("\n##############END DATA#############\n");
-
 
 					for (var key in data) {
 						if (data.hasOwnProperty(key)) {
 							let coin = data[key];
-							//console.log("requestResult.data[key]: ", typeof(requestResult.data[key] ));
-							//console.log("data[key]: ", typeof(data[key] ));
-							//console.log("coin: ", coin);
-							//console.log("reqestResult: ", typeof(requestResult));
-							//console.log("coin.id: ", coin.id);
-							//currencies.push(Object.assign(requestResult.key));
+							console.log("coin: ", coin);
+							currencies.push(Object.assign(coin));
 						}
 					}
-					console.log(currencies);
-					currencies.forEach(elem => {
-						console.log(elem.name);
-					})
 				});
 			});
 
@@ -66,10 +57,9 @@ module.exports = (app, currencies) => {
 			});
 
 			res.render("pages/list", {
-				currencies: currencies
+				currencies: currencies,
+				css: location_css
 			});
 		}
 	);
 };
-
-

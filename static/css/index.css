@@ -1,0 +1,22 @@
+body {
+	background-color: #FEF;
+	color: #111;
+}
+
+.title {
+	text-align: center;
+	color: #111;
+	padding: 1em 0;
+}
+
+.green {
+	color: green;
+}
+
+.red {
+	color: red;
+}
+
+.blue {
+	color: #1f618d;
+}

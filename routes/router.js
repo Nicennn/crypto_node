@@ -1,5 +1,6 @@
 const https = require("https");
 const ejs = require("ejs");
+const passport = require("passport");
 
 const options = {
 	protocol: "https:",
@@ -14,6 +15,7 @@ module.exports = (app, currencies) => {
 	const location_css = "css";
 	const location_js = "js";
 	const location_images = "images";
+	const location_router = "/routes/router";
 	var httpsRequestResult;
 
 	app.get("/", 
@@ -58,8 +60,13 @@ module.exports = (app, currencies) => {
 
 			res.render("pages/list", {
 				currencies: currencies,
-				css: location_css
+				css: location_css,
+				router: location_router
 			});
 		}
 	);
+
+	app.get("/login", (req, res) => { res.render("pages/login") });
+
+	app.get("/signin", (req, res) => { res.render("pages/signin") });
 };

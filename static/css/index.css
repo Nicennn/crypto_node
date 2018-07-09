@@ -20,3 +20,14 @@ body {
 .blue {
 	color: #1f618d;
 }
+
+.login {
+	display: table;
+	margin: auto;
+}
+
+.form_login {
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+}

@@ -19,12 +19,10 @@ module.exports = (app, passport, currencies) => {
 
 	app.get("/", 
 		(req, res) => {
-			console.log("ROOT: session: ", req.session);
-
+			//console.log("ROOT: session: ", req.session);
 			res.render("pages/index", {
-				css: location_css,
-				js: location_js,
-				images: location_images
+				session: req.session,
+				currencies: currencies
 			});
 		}
 	);
@@ -60,16 +58,18 @@ module.exports = (app, passport, currencies) => {
 			});
 
 			res.render("pages/list", {
-				currencies: currencies,
-				css: location_css,
-				router: location_router
+				session: req.session,
+				currencies: currencies
 			});
 		}
 	);
 
 	app.get("/login", (req, res) => { 
 		console.log("C'est un GET!!!!!");
-		res.render("pages/login") 
+		res.render("pages/login", {
+			session: req.session,
+			currencies: currencies
+		}) 
 	});
 	app.post("/login", 
 		passport.authenticate("local-login", {
@@ -78,7 +78,12 @@ module.exports = (app, passport, currencies) => {
 		})
 	);
 
-	app.get("/signup", (req, res) => { res.render("pages/signup") });
+	app.get("/signup", (req, res) => { 
+		res.render("pages/signup", {
+			session: req.session,
+			currencies: currencies
+		}) 
+	});
 	app.post("/signup", passport.authenticate("local-signup", {
 		successRedirect: "/",
 		failureRedirect: "/signup"

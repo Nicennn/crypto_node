@@ -1,0 +1,68 @@
+module.exports = (passport, LocalStrategy, User) => {
+
+	// Serialize for session
+	passport.serializeUser((user, done) => {
+		console.log("SERIALIZE: ", user);
+		console.log("SERIALIZE: ", user.email);
+		done(null, user.email);
+	});
+
+	// Deserialize for session
+	passport.deserializeUser((email, done) => {
+		console.log("DESERIALIZE: ", email);
+		User.find({ email: email }, (err, user) => {
+			console.log("DEZERIALIZE: ", user);
+			done(err, user);
+		});
+	});
+
+	passport.use("local-signup", new LocalStrategy(
+		{
+			usernameField: "email",
+			passwordField: "password",
+			passReqToCallback: true
+		},
+		(req, email, password, done) => {
+			User.findOne({email: email}, (err, user) => {
+				if (err) { 
+					return done(err); 
+				} else if (user) {
+					return done(null, false, {message: "User already exists"});
+				} else {
+					var newUser = new User();
+					newUser.email = email;
+					newUser.password = newUser.hash(password);
+					newUser.save((err) => {
+						if (err) throw err;
+						req.session.email = newUser.email;
+						return done(null, newUser);
+					});
+				}
+			});
+		})
+	);
+
+	passport.use("local-login", new LocalStrategy(
+		{
+			usernameField: "email",
+			passwordField: "password",
+			passReqToCallback: true
+		},
+		(req, email, password, done) => {
+			User.findOne({email: email}, (err, user) => {
+				if (err) {
+					return (done(err));
+				} else if (!user) {
+					return done(null, false, {message: "user does not exist"});
+				} else {
+					if (user.checkPassword(password, user.password)) {
+						req.session.email = user.email;
+						return done(null, user);
+					} else {
+						return done(null, false, {message: "bad password"});
+					}
+				}
+			});
+		}
+	));
+};

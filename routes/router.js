@@ -19,7 +19,7 @@ module.exports = (app, passport, currencies) => {
 
 	app.get("/", 
 		(req, res) => {
-			console.log(req.session);
+			console.log("ROOT: session: ", req.session);
 
 			res.render("pages/index", {
 				css: location_css,
@@ -71,10 +71,12 @@ module.exports = (app, passport, currencies) => {
 		console.log("C'est un GET!!!!!");
 		res.render("pages/login") 
 	});
-	app.post("/login", passport.authenticate("local-login", {
-		successRedirect: "/",
-		failureRedirect: "/login"
-	}));
+	app.post("/login", 
+		passport.authenticate("local-login", {
+			successRedirect: "/",
+			failureRedirect: "/login"
+		})
+	);
 
 	app.get("/signup", (req, res) => { res.render("pages/signup") });
 	app.post("/signup", passport.authenticate("local-signup", {

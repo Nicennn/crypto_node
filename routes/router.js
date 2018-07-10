@@ -71,15 +71,15 @@ module.exports = (app, passport, currencies) => {
 		console.log("C'est un GET!!!!!");
 		res.render("pages/login") 
 	});
-	app.post("/login", passport.authenticate("local-signup", {
+	app.post("/login", passport.authenticate("local-login", {
 		successRedirect: "/",
-		failureRedirect: "/signup"
+		failureRedirect: "/login"
 	}));
 
 	app.get("/signup", (req, res) => { res.render("pages/signup") });
 	app.post("/signup", passport.authenticate("local-signup", {
 		successRedirect: "/",
-		failureRedirect: "/list"
+		failureRedirect: "/signup"
 	}));
 
 	app.get("/logout", (req, res) => {

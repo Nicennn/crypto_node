@@ -17,16 +17,4 @@ userSchema.methods.checkPassword = (password, userPassword) => {
 	return bcrypt.compareSync(password, userPassword);
 }
 
-//userSchema.methods.hash = (password, saltRounds) => {
-//	bcrypt.hash(password, saltRounds).then(
-//		function(hash) {
-//			console.log(this);
-//		}
-//	);
-//};
-
-//userSchema.methods.comparePasswdHash = password => {
-//	return bcrypt.compare(password, this.local.password);
-//}
-
 module.exports = mongoose.model("User", userSchema);

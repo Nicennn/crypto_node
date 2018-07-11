@@ -65,7 +65,6 @@ module.exports = (app, passport, currencies) => {
 	);
 
 	app.get("/login", (req, res) => { 
-		console.log("C'est un GET!!!!!");
 		res.render("pages/login", {
 			session: req.session,
 			currencies: currencies
@@ -93,4 +92,15 @@ module.exports = (app, passport, currencies) => {
 		req.logout();
 		res.redirect("/");
 	})
+
+	app.get("/profile", (req, res) => {
+		res.render("pages/profile", {
+			session: req.session,
+			currencies: currencies
+		})
+	})
+	app.post("/profile", (req, res) => {
+
+	})
+
 };

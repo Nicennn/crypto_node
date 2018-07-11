@@ -31,3 +31,12 @@ body {
 	text-align: center;
 	vertical-align: middle;
 }
+
+.center {
+	text-align: center;
+	color: #111;
+}
+
+.inLineBlock {
+	display: inline-block;
+}

@@ -21,7 +21,22 @@ const currencies = [];
 app.set("view engine", "ejs");
 app.set("trust proxy", 1);
 
+app.locals.retrieveUser = (email, coins) => {
+	User.findOne({email: email}, (err, user) => {
+		console.log(user);
+		if (err) {
+			console.log("ERROR: ", err);
+		} else if (user) {
+			coins = user.password;
+			console.log("COINS: ", coins);
+		} else {
+			console.log("No Such user");
+		}
+	});
+};
+
 require("./services/passport")(passport, LocalStrategy, User);
+require("./services/addCoin")(app, User);
 app.use(session({
 	name: "cryptoNodeCookie",
 	secret: keys.session_secret,

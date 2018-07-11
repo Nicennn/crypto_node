@@ -2,16 +2,12 @@ module.exports = (passport, LocalStrategy, User) => {
 
 	// Serialize for session
 	passport.serializeUser((user, done) => {
-		console.log("SERIALIZE: ", user);
-		console.log("SERIALIZE: ", user.email);
 		done(null, user.email);
 	});
 
 	// Deserialize for session
 	passport.deserializeUser((email, done) => {
-		console.log("DESERIALIZE: ", email);
 		User.find({ email: email }, (err, user) => {
-			console.log("DEZERIALIZE: ", user);
 			done(err, user);
 		});
 	});
@@ -57,6 +53,7 @@ module.exports = (passport, LocalStrategy, User) => {
 				} else {
 					if (user.checkPassword(password, user.password)) {
 						req.session.email = user.email;
+						req.session.coins = user.coins;
 						return done(null, user);
 					} else {
 						return done(null, false, {message: "bad password"});

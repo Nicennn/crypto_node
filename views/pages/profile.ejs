@@ -12,14 +12,14 @@
 				<form class="form_login" action="/profile" method="post">
 					<div class="form-group inLineBlock">
 						<label for="exampleFormControlSelect1">Add a new coin to watchlist</label>
-						<select class="form-control" id="exampleFormControlSelect1">
+						<select class="form-control" id="exampleFormControlSelect1" name="coin">
 							<% currencies.forEach((curr) => { %>
-								<option><%= curr.name %></option>
+								<option value="<%= curr.name %>"><%= curr.name %></option>
 
 							<% }) %>
 						</select>
 					</div>
-					<button type="submit" class="btn btn-primary inLineBlock" name="addCoin">Add</button>
+					<button type="submit" class="btn btn-primary inLineBlock" name="newCoin" value="ok">Add</button>
 				</form>
 			</div>
 		<% } else { %>
@@ -43,7 +43,7 @@
 				<tbody>
 					<% session.coins.forEach((curr) => { %>
 						<tr>
-							<th scope="row"></th>
+							<th scope="row"><%= curr %></th>
 						</tr>
 
 					<% }) %>

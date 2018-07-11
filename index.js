@@ -35,8 +35,23 @@ app.locals.retrieveUser = (email, coins) => {
 	});
 };
 
+const addCoin = (req, res, newCoin) => {
+	User.findOne({email: req.session.email}, (err, user) => {
+		if (err) {
+			console.log("ERROR: ", error);
+		} else if (user) {
+			if (!user.coins.includes(newCoin)) {
+				user.coins.push(newCoin);
+				user.save();
+			}
+		} else {
+			console.log("No such user")
+		}
+	});
+};
+
 require("./services/passport")(passport, LocalStrategy, User);
-require("./services/addCoin")(app, User);
+//const addCoin = require("./services/addCoin")();
 app.use(session({
 	name: "cryptoNodeCookie",
 	secret: keys.session_secret,
@@ -51,6 +66,6 @@ app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-require("./routes/router")(app, passport, currencies);
+require("./routes/router")(app, passport, currencies, addCoin);
 
 app.listen(PORT, () => console.log("App listening on port ", PORT));

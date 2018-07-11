@@ -27,36 +27,7 @@ module.exports = (app, passport, currencies, addCoin) => {
 		}
 	);
 
-	app.get("/list",
-		(req, res) => {
-			var requestResult = null;
-			var body = "";
-
-			const rqst = https.get(options, (res) => {
-				//console.log("status code: ", res.statusCode); 
-				//console.log("headers: ", res.headers);
-
-				// Reconstitute the body from multiple data chunks
-				res.on("data", data =>  { body += data });
-
-				// Data has been consumed
-				res.on("end", () => {
-					requestResult = JSON.parse(body);
-					let data = requestResult.data;
-
-					for (var key in data) {
-						if (data.hasOwnProperty(key)) {
-							let coin = data[key];
-							currencies.push(Object.assign(coin));
-						}
-					}
-				});
-			});
-
-			rqst.on("error", (error) => {
-				console.log("ERROR: ", error.message);
-			});
-
+	app.get("/list", (req, res) => {
 			res.render("pages/list", {
 				session: req.session,
 				currencies: currencies

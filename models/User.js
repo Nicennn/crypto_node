@@ -6,7 +6,11 @@ const saltRounds = 10;
 const userSchema = mongoose.Schema({
 	email: String,
 	password: String,
-	coins: [String]
+	coins: [{
+		name: String,
+		symbol: String,
+		minValue: Number
+	}]
 });
 
 userSchema.methods.hash = (password) => {

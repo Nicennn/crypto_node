@@ -31,6 +31,7 @@ module.exports = (passport, LocalStrategy, User) => {
 					newUser.save((err) => {
 						if (err) throw err;
 						req.session.email = newUser.email;
+						req.session.coins = [];
 						return done(null, newUser);
 					});
 				}

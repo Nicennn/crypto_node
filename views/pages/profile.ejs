@@ -14,7 +14,7 @@
 						<label for="exampleFormControlSelect1">Add a new coin to watchlist</label>
 						<select class="form-control" id="exampleFormControlSelect1" name="coin">
 							<% currencies.forEach((curr) => { %>
-								<option value="<%= curr.name %>"><%= curr.name %></option>
+								<option value='{"name": "<%= curr.name %>", "symbol": "<%= curr.symbol %>"}'><%= curr.name %></option>
 
 							<% }) %>
 						</select>
@@ -43,7 +43,10 @@
 				<tbody>
 					<% session.coins.forEach((curr) => { %>
 						<tr>
-							<th scope="row"><%= curr %></th>
+							<th scope="row">Checkbox</th>
+							<td ><%= curr.symbol %></td>
+							<td ><%= curr.name %></td>
+							<td ><%= curr.minValue %></td>
 						</tr>
 
 					<% }) %>

@@ -68,20 +68,61 @@ app.locals.retrieveUser = (email, coins) => {
 	});
 };
 
+const updateSession = (req, name, symbol, minValue) => {
+	let coins = req.session.coins;
+	console.log("COINS: ", coins);
+	for (let i = 0; i < coins.length; i++) {
+		if (coins[i].name == name) {
+			coins[i].symbol = symbol;
+			coins[i].minValue = minValue;
+			return ( coins );
+		}
+	}
+	console.log("minValue: ", minValue);
+	coins.push({name: name, symbol: symbol, minValue: minValue});
+	return (coins);
+}
+
 const addCoin = (req, res, newCoin) => {
 	User.findOne({email: req.session.email}, (err, user) => {
 		if (err) {
 			console.log("ERROR: ", error);
 		} else if (user) {
-			if (!user.coins.includes(newCoin)) {
-				user.coins.push(newCoin);
+			let coins = user.coins.toObject();
+			let flag = true;
+			console.log("DB COINS: ", coins);
+			for (let i = 0; i < coins.lenght; i++) {
+				console.log("TEST/TEST: ", coins[i]);
+				if (coins[i].name == newCoin.name) {
+					flag = false;
+					console.log("COIN ALREADY IN DB");
+					break ;
+				}
+			}
+			if (flag) {
+				user.coins.push({name: newCoin.name, symbol: newCoin.symbol, minValue: 0});
 				user.save();
 			}
 		} else {
-			console.log("No such user")
+		console.log("No such user");
 		}
-	});
-};
+	}
+)};
+
+//const addCoin = (req, res, newCoin) => {
+//	User.findOne({email: req.session.email}, (err, user) => {
+//		if (err) {
+//			console.log("ERROR: ", error);
+//		} else if (user) {
+//			if (!user.coins.includes({name: newCoin.name})) {
+//				user.coins.push({name: newCoin.name, symbol: newCoin.symbol, minValue: 0});
+//				user.save();
+//			}
+//		} else {
+//			console.log("No such user")
+//		}
+//	});
+//};
 
 require("./services/passport")(passport, LocalStrategy, User);
 app.use(session({
@@ -98,6 +139,6 @@ app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-require("./routes/router")(app, passport, currencies, addCoin);
+require("./routes/router")(app, passport, currencies, addCoin, updateSession);
 
 app.listen(PORT, () => console.log("App listening on port ", PORT));

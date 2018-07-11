@@ -10,7 +10,7 @@ const options = {
 	json: true
 };
 
-module.exports = (app, passport, currencies, addCoin) => {
+module.exports = (app, passport, currencies, addCoin, updateSession) => {
 	const location_css = "css";
 	const location_js = "js";
 	const location_images = "images";
@@ -19,7 +19,6 @@ module.exports = (app, passport, currencies, addCoin) => {
 
 	app.get("/", 
 		(req, res) => {
-			//console.log("ROOT: session: ", req.session);
 			res.render("pages/index", {
 				session: req.session,
 				currencies: currencies
@@ -28,11 +27,11 @@ module.exports = (app, passport, currencies, addCoin) => {
 	);
 
 	app.get("/list", (req, res) => {
-			res.render("pages/list", {
-				session: req.session,
-				currencies: currencies
-			});
-		}
+		res.render("pages/list", {
+			session: req.session,
+			currencies: currencies
+		});
+	}
 	);
 
 	app.get("/login", (req, res) => { 
@@ -60,7 +59,7 @@ module.exports = (app, passport, currencies, addCoin) => {
 	}));
 
 	app.get("/logout", (req, res) => {
-		req.logout();
+		req.session.destroy();
 		res.redirect("/");
 	});
 
@@ -72,9 +71,14 @@ module.exports = (app, passport, currencies, addCoin) => {
 	});
 	app.post("/profile", (req, res) => {
 		console.log(req.body);
-		if (req.body && req.body.newCoin) {
-			addCoin(req, res, req.body.coin);
-			req.session.coins.push(req.body.coin);
+		let json = JSON.parse(req.body.coin);
+		console.log("JSON :", json);
+		if (req.body && req.body.newCoin && req.body.coin) {
+			addCoin(req, res, json);
+			console.log("SESSION: ", req.session);
+			//req.session.coins.push(req.body.coin);
+			req.session.coins = updateSession(req, json.name, json.symbol, 0);
+			console.log("SESSION2: ", req.session);
 		} else {
 			console.log("no  new coin to add");
 		}

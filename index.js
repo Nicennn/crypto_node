@@ -16,6 +16,33 @@ mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// TEST
+//const options = {
+//	protocol: "https:",
+//	hostname: "api.coinmarketcap.com",
+//	path: "/v2/ticker/?convert=EUR&limit=20",
+//	port: 443 , //http: 80, https: 443
+//	method: "GET",
+//	json: true
+//};
+//const updateList = https.get(options, (res) => {
+//	res.on("data", data =>  { body += data });
+//
+//	// Data has been consumed
+//	res.on("end", () => {
+//		requestResult = JSON.parse(body);
+//		let data = requestResult.data;
+//
+//		for (var key in data) {
+//			if (data.hasOwnProperty(key)) {
+//				let coin = data[key];
+//				currencies.push(Object.assign(coin));
+//			}
+//		}
+//	});	
+//});
+
 const currencies = [];
 
 app.set("view engine", "ejs");
@@ -51,7 +78,6 @@ const addCoin = (req, res, newCoin) => {
 };
 
 require("./services/passport")(passport, LocalStrategy, User);
-//const addCoin = require("./services/addCoin")();
 app.use(session({
 	name: "cryptoNodeCookie",
 	secret: keys.session_secret,

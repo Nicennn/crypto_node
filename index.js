@@ -105,12 +105,21 @@ const addCoin = (req, res, newCoin) => {
 			console.log("No such user");
 		}
 	}
-)};
+	)};
 
 const removeCoin = (req) => {
 	let targetCoin = req.body.rmCoin;
 	console.log("TARGET COIN: ", targetCoin);
 	User.update({email: req.session.email}, {"$pull": {"coins": {"name": targetCoin}}});
+}
+
+const removeCoinSession = (req) => {
+	for (let i = 0;  i < req.session.coins.length; i++) {
+		if (req.session.coins[i].name == req.body.rmCoin) {
+			req.session.coins.splice(i, 1);
+			break ;
+		}
+	}
 }
 
 require("./services/passport")(passport, LocalStrategy, User);
@@ -128,6 +137,6 @@ app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-require("./routes/router")(app, passport, currencies, addCoin, removeCoin, updateSession);
+require("./routes/router")(app, passport, currencies, addCoin, removeCoin, updateSession, removeCoinSession);
 
 app.listen(PORT, () => console.log("App listening on port ", PORT));

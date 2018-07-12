@@ -10,7 +10,7 @@ const options = {
 	json: true
 };
 
-module.exports = (app, passport, currencies, addCoin, removeCoin, updateSession) => {
+module.exports = (app, passport, currencies, addCoin, removeCoin, updateSession, removeCoinSession) => {
 	const location_css = "css";
 	const location_js = "js";
 	const location_images = "images";
@@ -79,12 +79,7 @@ module.exports = (app, passport, currencies, addCoin, removeCoin, updateSession)
 		} else if (req.body && req.body.rmCoin) {
 			console.log("remove coin");
 			removeCoin(req);
-			for (let i = 0;  i < req.session.coins.length; i++) {
-				if (req.session.coins[i].name == req.body.rmCoin) {
-					req.session.coins.splice(i, 1);
-					break ;
-				}
-			}
+			removeCoinSession(req);
 		}
 		res.redirect("/profile");
 	});

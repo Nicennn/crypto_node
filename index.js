@@ -110,7 +110,18 @@ const addCoin = (req, res, newCoin) => {
 const removeCoin = (req) => {
 	let targetCoin = req.body.rmCoin;
 	console.log("TARGET COIN: ", targetCoin);
-	User.update({email: req.session.email}, {"$pull": {"coins": {"name": targetCoin}}});
+	console.log("SESSION REQ: ", req.session);
+	console.log("EMAIL: ", req.session.email);
+	//User.update({"email": req.session.email}, {$pull: {"coins.name": {$eq: targetCoin}}})
+	try {
+		User.update({"email": req.session.email}, {$pull: {"coins": {"name": targetCoin}}}).exec();
+		//User.save();
+	} catch (error) {
+		console.log("ERROR: ", error);
+	}
+	console.log("DELETED COIN?");
+	//User.update({email: req.session.email}, {"$pull": {"coins": {"name": targetCoin}}});
+	//User.update({"email": req.session.email, "coins": {$elemMatch: {"name": targetCoin}}}, $unset);
 }
 
 const removeCoinSession = (req) => {

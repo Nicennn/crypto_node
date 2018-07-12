@@ -70,15 +70,11 @@ module.exports = (app, passport, currencies, addCoin, updateSession) => {
 		})
 	});
 	app.post("/profile", (req, res) => {
-		console.log(req.body);
+		//console.log(req.body);
 		let json = JSON.parse(req.body.coin);
-		console.log("JSON :", json);
 		if (req.body && req.body.newCoin && req.body.coin) {
 			addCoin(req, res, json);
-			console.log("SESSION: ", req.session);
-			//req.session.coins.push(req.body.coin);
 			req.session.coins = updateSession(req, json.name, json.symbol, 0);
-			console.log("SESSION2: ", req.session);
 		} else {
 			console.log("no  new coin to add");
 		}

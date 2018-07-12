@@ -90,9 +90,7 @@ const addCoin = (req, res, newCoin) => {
 		} else if (user) {
 			let coins = user.coins.toObject();
 			let flag = true;
-			console.log("DB COINS: ", coins);
-			for (let i = 0; i < coins.lenght; i++) {
-				console.log("TEST/TEST: ", coins[i]);
+			for (var i = 0; i < coins.length; i++) {
 				if (coins[i].name == newCoin.name) {
 					flag = false;
 					console.log("COIN ALREADY IN DB");
@@ -104,25 +102,10 @@ const addCoin = (req, res, newCoin) => {
 				user.save();
 			}
 		} else {
-		console.log("No such user");
+			console.log("No such user");
 		}
 	}
 )};
-
-//const addCoin = (req, res, newCoin) => {
-//	User.findOne({email: req.session.email}, (err, user) => {
-//		if (err) {
-//			console.log("ERROR: ", error);
-//		} else if (user) {
-//			if (!user.coins.includes({name: newCoin.name})) {
-//				user.coins.push({name: newCoin.name, symbol: newCoin.symbol, minValue: 0});
-//				user.save();
-//			}
-//		} else {
-//			console.log("No such user")
-//		}
-//	});
-//};
 
 require("./services/passport")(passport, LocalStrategy, User);
 app.use(session({

@@ -10,7 +10,7 @@ const options = {
 	json: true
 };
 
-module.exports = (app, passport, currencies, addCoin, updateSession) => {
+module.exports = (app, passport, currencies, addCoin, removeCoin, updateSession) => {
 	const location_css = "css";
 	const location_js = "js";
 	const location_images = "images";
@@ -70,13 +70,21 @@ module.exports = (app, passport, currencies, addCoin, updateSession) => {
 		})
 	});
 	app.post("/profile", (req, res) => {
-		//console.log(req.body);
-		let json = JSON.parse(req.body.coin);
+		console.log(req.body);
 		if (req.body && req.body.newCoin && req.body.coin) {
+			console.log("add new coin");
+			let json = JSON.parse(req.body.coin);
 			addCoin(req, res, json);
 			req.session.coins = updateSession(req, json.name, json.symbol, 0);
-		} else {
-			console.log("no  new coin to add");
+		} else if (req.body && req.body.rmCoin) {
+			console.log("remove coin");
+			removeCoin(req);
+			for (let i = 0;  i < req.session.coins.length; i++) {
+				if (req.session.coins[i].name == req.body.rmCoin) {
+					req.session.coins.splice(i, 1);
+					break ;
+				}
+			}
 		}
 		res.redirect("/profile");
 	});

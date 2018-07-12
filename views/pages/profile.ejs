@@ -29,32 +29,34 @@
 
 		<h5 class="title">Coins you are watching</h5>
 
-		<% if (session && session.coins && session.coins.length > 0) { %>
-			<p><%= session.coins.length %></p>
-			<table class="table table-hover">
-				<thead class="thead-light">
-					<tr>
-						<th scope="col">Remove coin</th>
-						<th scope="col">Symbol</th>
-						<th scope="col">Name</th>
-						<th scope="col">Min Accepted Value</th>
-					</tr>
-				</thead>
-				<tbody>
-					<% session.coins.forEach((curr) => { %>
+		<form action="/profile" method="post">
+			<% if (session && session.coins && session.coins.length > 0) { %>
+				<p><%= session.coins.length %></p>
+				<table class="table table-hover">
+					<thead class="thead-light">
 						<tr>
-							<th scope="row">Checkbox</th>
-							<td ><%= curr.symbol %></td>
-							<td ><%= curr.name %></td>
-							<td ><%= curr.minValue %></td>
+							<th scope="col">Remove coin</th>
+							<th scope="col">Symbol</th>
+							<th scope="col">Name</th>
+							<th scope="col">Min Accepted Value</th>
 						</tr>
+					</thead>
+					<tbody>
+						<% session.coins.forEach((curr) => { %>
+							<tr>
+								<th scope="row"><button type="sumbit" class="btn btn-danger" name="rmCoin" value="<%= curr.name %>">Remove <%= curr.symbol %></button></th>
+								<td ><%= curr.symbol %></td>
+								<td ><%= curr.name %></td>
+								<td ><%= curr.minValue %></td>
+							</tr>
 
-					<% }) %>
-				</tbody>
-			</table>
-		<% } else { %>
-			<p class="center">None</p>
-		<% } %>
+						<% }) %>
+					</tbody>
+				</table>
+			<% } else { %>
+				<p class="center">None</p>
+			<% } %>
+		</form>
 
 		<% include ../partials/footer %>
 	</body>

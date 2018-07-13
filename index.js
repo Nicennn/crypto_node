@@ -19,10 +19,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const currencies = [];
-const u = {};
-require("./services/utilities")(u, currencies, User);
-console.log("EXPORT: ", u);
-
+const u = require("./services/utilities")(currencies, User);
 
 app.set("view engine", "ejs");
 app.set("trust proxy", 1);

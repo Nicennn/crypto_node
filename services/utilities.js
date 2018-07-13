@@ -10,10 +10,14 @@ const options = {
 	method: "GET",
 	json: true
 };
-module.exports = (u, currencies, User) => {
-	u.updateList = https.get(options, (res) => {
-		res.on("data", data =>  { body += data });
 
+module.exports = (currencies, User) => {
+	const u = {};
+
+	setInterval(() => {
+	console.log("UPDATE LIST");
+	https.get(options, (res) => {
+		res.on("data", data =>  { body += data });
 		// Data has been consumed
 		res.on("end", () => {
 			requestResult = JSON.parse(body);
@@ -25,15 +29,16 @@ module.exports = (u, currencies, User) => {
 					currencies.push(Object.assign(coin));
 				}
 			}
-		});	
-	});
-	u.updateList.on("error", (error) => {
-		console.log("ERROR", error.message);
-	})
+			requestResult = null;
+			body = "";
+		})
+	})	
+	},
+		1000 * 60 * 60
+	);
 
 	u.updateSession = (req, name, symbol, minValue) => {
 		let coins = req.session.coins;
-		console.log("COINS: ", coins);
 		for (let i = 0; i < coins.length; i++) {
 			if (coins[i].name == name) {
 				coins[i].symbol = symbol;
@@ -41,7 +46,6 @@ module.exports = (u, currencies, User) => {
 				return ( coins );
 			}
 		}
-		console.log("minValue: ", minValue);
 		coins.push({name: name, symbol: symbol, minValue: minValue});
 		return (coins);
 	}
@@ -56,7 +60,6 @@ module.exports = (u, currencies, User) => {
 				for (var i = 0; i < coins.length; i++) {
 					if (coins[i].name == newCoin.name) {
 						flag = false;
-						console.log("COIN ALREADY IN DB");
 						break ;
 					}
 				}
@@ -77,7 +80,6 @@ module.exports = (u, currencies, User) => {
 		} catch (error) {
 			console.log("ERROR: ", error);
 		}
-		console.log("DELETED COIN?");
 	}
 
 	u.removeCoinSession = (req) => {
@@ -89,4 +91,5 @@ module.exports = (u, currencies, User) => {
 		}
 	}
 
+	return u;
 }

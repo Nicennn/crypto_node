@@ -12,7 +12,6 @@ const session = require("express-session");
 const FileStore = require("session-file-store")(session);
 const User = require("./models/User");
 
-
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
 
 const app = express();

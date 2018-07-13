@@ -14,28 +14,51 @@ const options = {
 module.exports = (currencies, User) => {
 	const u = {};
 
-	setInterval(() => {
-	console.log("UPDATE LIST");
-	https.get(options, (res) => {
-		res.on("data", data =>  { body += data });
-		// Data has been consumed
-		res.on("end", () => {
-			requestResult = JSON.parse(body);
-			let data = requestResult.data;
+	u.updateList = () => {
+		console.log("UPDATE LIST");
+		https.get(options, (res) => {
+			res.on("data", data =>  { body += data });
+			// Data has been consumed
+			res.on("end", () => {
+				requestResult = JSON.parse(body);
+				let data = requestResult.data;
 
-			for (var key in data) {
-				if (data.hasOwnProperty(key)) {
-					let coin = data[key];
-					currencies.push(Object.assign(coin));
+				for (var key in data) {
+					if (data.hasOwnProperty(key)) {
+						let coin = data[key];
+						currencies.push(Object.assign(coin));
+					}
 				}
-			}
-			requestResult = null;
-			body = "";
-		})
-	})	
-	},
-		1000 * 60 * 60
-	);
+				requestResult = null;
+				body = "";
+			})
+		})	
+	}
+	u.updateList();
+	setInterval(u.updateList, 1000 * 60 * 60);
+
+	//u.updateList = setInterval(() => {
+	//console.log("UPDATE LIST");
+	//https.get(options, (res) => {
+	//	res.on("data", data =>  { body += data });
+	//	// Data has been consumed
+	//	res.on("end", () => {
+	//		requestResult = JSON.parse(body);
+	//		let data = requestResult.data;
+
+	//		for (var key in data) {
+	//			if (data.hasOwnProperty(key)) {
+	//				let coin = data[key];
+	//				currencies.push(Object.assign(coin));
+	//			}
+	//		}
+	//		requestResult = null;
+	//		body = "";
+	//	})
+	//})	
+	//},
+	//	1000 * 60 * 60
+	//);
 
 	u.updateSession = (req, name, symbol, minValue) => {
 		let coins = req.session.coins;

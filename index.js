@@ -11,6 +11,7 @@ const keys = require("./config/keys");
 const session = require("express-session");
 const FileStore = require("session-file-store")(session);
 const User = require("./models/User");
+const nodemailer = require("nodemailer");
 
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
 
@@ -19,6 +20,7 @@ const PORT = process.env.PORT || 5000;
 
 const currencies = [];
 const u = require("./services/utilities")(currencies, User);
+const transporter = require("./services/mail")();
 
 app.set("view engine", "ejs");
 app.set("trust proxy", 1);
@@ -53,6 +55,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 require("./routes/router")(app, passport, currencies, u.addCoin, u.removeCoin, 
-	u.updateSession, u.removeCoinSession, u.updateMinValue);
+	u.updateSession, u.removeCoinSession, u.updateMinValue, transporter);
 
 app.listen(PORT, () => console.log("App listening on port ", PORT));

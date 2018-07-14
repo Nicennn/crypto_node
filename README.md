@@ -8,7 +8,7 @@ Clone the repo in a directory.
 run: `npm install` to install the dependecies  
 in another terminal, in the directory of your choice, run: `mongod --dbpath=$PWD/data`  
 run: `npm run dev` to run the server localy.  
-You can now access it at http://127.0.0.1:5000  
+You can now access it at [ http://127.0.0.1:5000 ]()  
 
 ## Npm modules used
 	* express

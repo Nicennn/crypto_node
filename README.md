@@ -1,13 +1,14 @@
 # CRYPTO NODE
 
 ## Description
-Nodejs server fething cryptocurrencies prices in euro from [ CoinMarketCap ](https://coinmarketcap.com/api/), and notifying the user by email when the price goes down below a price they choose as a limit.
+Nodejs server fething cryptocurrencies prices in euro from [ CoinMarketCap ](https://coinmarketcap.com/api/), and notifying the user by email when the price goes down below a price chooses as a limit.
 
 ## How to use
-Clone the repo in a drirectory.
-run: `npm install` to install the dependecies
-run: `npm run dev` to run ther server localy.
-You can now access it at http://127.0.0.1:5000
+Clone the repo in a directory.  
+run: `npm install` to install the dependecies  
+in another terminal, in the directory of your choice, run: `mongod --dbpath=$PWD/data`  
+run: `npm run dev` to run the server localy.  
+You can now access it at http://127.0.0.1:5000  
 
 ## Npm modules used
 	* express

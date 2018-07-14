@@ -10,7 +10,8 @@ const options = {
 	json: true
 };
 
-module.exports = (app, passport, currencies, addCoin, removeCoin, updateSession, removeCoinSession) => {
+module.exports = (app, passport, currencies, addCoin, removeCoin, updateSession, 
+	removeCoinSession, updateMinValue) => {
 	const location_css = "css";
 	const location_js = "js";
 	const location_images = "images";
@@ -80,6 +81,13 @@ module.exports = (app, passport, currencies, addCoin, removeCoin, updateSession,
 			console.log("remove coin");
 			removeCoin(req);
 			removeCoinSession(req);
+		} else if (req.body && req.body.update) {
+			console.log("update coin minValue: ", req.body.update);
+			let coin = req.body.currCoinName;
+			let minValue = req.body.update;
+			let symbol = req.body.currCoinSymbol;
+			updateMinValue(req);
+			req.session.coins = updateSession(req, coin, symbol, minValue)
 		}
 		res.redirect("/profile");
 	});

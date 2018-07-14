@@ -40,3 +40,8 @@ body {
 .inLineBlock {
 	display: inline-block;
 }
+
+._input {
+	max-width: 5em;
+	margin-right: 2em;
+}

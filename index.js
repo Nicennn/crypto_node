@@ -53,6 +53,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 require("./routes/router")(app, passport, currencies, u.addCoin, u.removeCoin, 
-	u.updateSession, u.removeCoinSession);
+	u.updateSession, u.removeCoinSession, u.updateMinValue);
 
 app.listen(PORT, () => console.log("App listening on port ", PORT));

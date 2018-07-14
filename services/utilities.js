@@ -37,29 +37,6 @@ module.exports = (currencies, User) => {
 	u.updateList();
 	setInterval(u.updateList, 1000 * 60 * 60);
 
-	//u.updateList = setInterval(() => {
-	//console.log("UPDATE LIST");
-	//https.get(options, (res) => {
-	//	res.on("data", data =>  { body += data });
-	//	// Data has been consumed
-	//	res.on("end", () => {
-	//		requestResult = JSON.parse(body);
-	//		let data = requestResult.data;
-
-	//		for (var key in data) {
-	//			if (data.hasOwnProperty(key)) {
-	//				let coin = data[key];
-	//				currencies.push(Object.assign(coin));
-	//			}
-	//		}
-	//		requestResult = null;
-	//		body = "";
-	//	})
-	//})	
-	//},
-	//	1000 * 60 * 60
-	//);
-
 	u.updateSession = (req, name, symbol, minValue) => {
 		let coins = req.session.coins;
 		for (let i = 0; i < coins.length; i++) {
@@ -111,6 +88,17 @@ module.exports = (currencies, User) => {
 				req.session.coins.splice(i, 1);
 				break ;
 			}
+		}
+	}
+
+	u.updateMinValue = (req) => {
+		let targetCoin = req.body.currCoinName;
+		let minValue = req.body.update;
+		let email = req.session.email;
+		try {
+			User.update({"email": email, "coins.name": targetCoin}, {$set: {"coins.$.minValue": minValue}}).exec();
+		} catch (e) {
+			console.log("ERROR: ", e);
 		}
 	}
 

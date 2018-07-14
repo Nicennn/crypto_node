@@ -1,11 +1,11 @@
 const nodemailer = require("nodemailer");
-const keys = require("./config/keys");
+const keys = require("../config/keys");
 
 module.exports = () => {
 	const transporter = {};
 
 	transporter.mailOptions = {
-		from: keys.from
+		from: keys.from,
 		to: keys.to,
 		subject: "Test",
 		text: "updated MinValue"

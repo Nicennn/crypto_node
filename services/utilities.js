@@ -35,7 +35,9 @@ module.exports = (currencies, User, transporter) => {
 								if (curr.quotes.EUR.price < coin.minValue) {
 									transporter.mailOptions.from = keys.from;
 									transporter.mailOptions.to = user.email;
-									transporter.mailOptions.text = curr.name + ": ", curr.quotes.EUR.price + " < ", coin.minValue + "!";
+									let text = curr.name + ": " + String(curr.quotes.EUR.price) + " < " + String(coin.minValue) + "!";
+									console.log("TEXT: ", text);
+									transporter.mailOptions.text = text;
 									console.log("SEND MAIL\noptions: ", transporter.mailOptions);
 									transp.sendMail(transporter.mailOptions, (error, info) => {
 										if (error)

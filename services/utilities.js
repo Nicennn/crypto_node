@@ -1,4 +1,7 @@
 const https = require("https");
+const nodemailer = require("nodemailer");
+const mongoose = require("mongoose");
+
 var requestResult = null;
 var body = "";
 
@@ -11,8 +14,42 @@ const options = {
 	json: true
 };
 
-module.exports = (currencies, User) => {
+module.exports = (currencies, User, transporter) => {
 	const u = {};
+
+	u.sendMail = (currencies, User) => {
+		const transp = transporter.t();
+
+		User.find({}, (error, users) =>{
+			if (error) {
+				console.log("ERROR: ", error);
+			} else {
+				//console.log(users);
+				users.forEach(user => {
+					//console.log("User: ", user.email);
+					user.coins.forEach(coin => {
+						//console.log("coin: ", coin.name, "minValue: ", coin.minValue);
+						currencies.forEach(curr => {
+							if (curr.name == coin.name) {
+								if (curr.quotes.EUR.price < coin.minValue) {
+									transporter.mailOptions.from = "cryptoNode <ancap@ancapistan.local>";
+									transporter.mailOptions.to = user.email;
+									transporter.mailOptions.text = curr.name + ": ", curr.quotes.EUR.price + " < ", coin.minValue + "!";
+									console.log("SEND MAIL\noptions: ", transporter.mailOptions);
+									transp.sendMail(transporter.mailOptions, (error, info) => {
+										if (error)
+											return console.log(error);
+									console.log("message Sent: %s", info.messageId);
+									console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+									});
+								}
+							}
+						})
+					})
+				})
+			}
+		})
+	}
 
 	u.updateList = () => {
 		console.log("UPDATE LIST");
@@ -29,13 +66,18 @@ module.exports = (currencies, User) => {
 						currencies.push(Object.assign(coin));
 					}
 				}
+				u.sendMail(currencies, User);
 				requestResult = null;
 				body = "";
 			})
+		}).on("error", (e) => {
+			console.log("ERROR WHILE FETCHING DATA FROM API: ", error);
+			console.log("Wait until next update");
 		})	
 	}
 	u.updateList();
-	setInterval(u.updateList, 1000 * 60 * 60);
+	//setInterval(u.updateList, 1000 * 60 * 60);
+	setInterval(u.updateList, 1000 * 20);
 
 	u.updateSession = (req, name, symbol, minValue) => {
 		let coins = req.session.coins;

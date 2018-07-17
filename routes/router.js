@@ -89,15 +89,6 @@ module.exports = (app, passport, currencies, addCoin, removeCoin, updateSession,
 			let symbol = req.body.currCoinSymbol;
 			updateMinValue(req);
 			req.session.coins = updateSession(req, coin, symbol, minValue)
-			// For test purposes only
-			//console.log(transporter);
-			//const transp = transporter.t();
-			//transp.sendMail(transporter.mailOptions, (error, info) => {
-			//	if (error)
-			//		return console.log(error);
-			//	console.log("message Sent: %s", info.messageId);
-			//	console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-			//});
 		}
 		res.redirect("/profile");
 	});

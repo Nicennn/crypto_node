@@ -1,6 +1,7 @@
 const https = require("https");
 const nodemailer = require("nodemailer");
 const mongoose = require("mongoose");
+const keys = require("../config/keys");
 
 var requestResult = null;
 var body = "";
@@ -32,7 +33,7 @@ module.exports = (currencies, User, transporter) => {
 						currencies.forEach(curr => {
 							if (curr.name == coin.name) {
 								if (curr.quotes.EUR.price < coin.minValue) {
-									transporter.mailOptions.from = "cryptoNode <ancap@ancapistan.local>";
+									transporter.mailOptions.from = keys.from;
 									transporter.mailOptions.to = user.email;
 									transporter.mailOptions.text = curr.name + ": ", curr.quotes.EUR.price + " < ", coin.minValue + "!";
 									console.log("SEND MAIL\noptions: ", transporter.mailOptions);
